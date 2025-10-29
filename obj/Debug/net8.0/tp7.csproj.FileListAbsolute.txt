@@ -1,0 +1,7 @@
+D:\FACULTAD\2do_anio\Taller2\tl2-tp7-2025-Sheepherr\obj\Debug\net8.0\tp7.csproj.AssemblyReference.cache
+D:\FACULTAD\2do_anio\Taller2\tl2-tp7-2025-Sheepherr\obj\Debug\net8.0\tp7.GeneratedMSBuildEditorConfig.editorconfig
+D:\FACULTAD\2do_anio\Taller2\tl2-tp7-2025-Sheepherr\obj\Debug\net8.0\tp7.AssemblyInfoInputs.cache
+D:\FACULTAD\2do_anio\Taller2\tl2-tp7-2025-Sheepherr\obj\Debug\net8.0\tp7.AssemblyInfo.cs
+D:\FACULTAD\2do_anio\Taller2\tl2-tp7-2025-Sheepherr\obj\Debug\net8.0\tp7.csproj.CoreCompileInputs.cache
+D:\FACULTAD\2do_anio\Taller2\tl2-tp7-2025-Sheepherr\obj\Debug\net8.0\tp7.MvcApplicationPartsAssemblyInfo.cs
+D:\FACULTAD\2do_anio\Taller2\tl2-tp7-2025-Sheepherr\obj\Debug\net8.0\tp7.MvcApplicationPartsAssemblyInfo.cache
