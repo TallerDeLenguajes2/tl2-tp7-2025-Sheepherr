@@ -1,24 +1,36 @@
+namespace ProductosRepository;
+
 using Microsoft.Data.Sqlite;
 
 using Productos;
 
 
-public class ProdcutosRepository
+public class ProductosRepository
 {
     private string cadenaConexion = "Data Source= Db/Tienda.db";
     
     public void InsertProducto (Productos producto)
     {
+        using var conexion = new SqliteConnection(cadenaConexion);
+        conexion.Open();
+        string query = "INSERT INTO Productos (Descripcion, Precio) VALUES (@Descripcion, @Precio)";
+        using var comando = new SqliteCommand(query,conexion);
+
+        comando.Parameters.Add(new SqliteParameter("@Descripcion", producto.descripcion));
+        comando.Parameters.Add(new SqliteParameter("@Precio", producto.precio));
         
+        comando.ExecuteNonQuery();
+        conexion.Close();
     }
     public void UpdateProducto(int id, Productos producto)
     {
-
+        using var conexion = new SqliteConnection(cadenaConexion);
+        conexion.Open();
     }
     public List<Productos> GetAllProductos()
     {
         List<Productos> productos = [];
-        string query = "SELEC * FROM productos";
+        string query = "SELEC * FROM Productos";
         using var conecction = new SqliteConnection(cadenaConexion);
         conecction.Open();
         var command = new SqliteCommand(query, conecction);
@@ -28,7 +40,7 @@ public class ProdcutosRepository
             {
                 var producto = new Productos
                 {
-                    idProducto = Convert.ToInt32(reader["id"]),
+                    idProducto = Convert.ToInt32(reader["idProducto"]),
                     descripcion = reader["Descripcion"].ToString(),
                     precio = Convert.ToInt32(reader["Precio"])
                 };

@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace ProductoController;
+using Microsoft.AspNetCore.Mvc;
+using ProductosRepository;
 
 
 [ApiController]
@@ -18,7 +18,7 @@ public ProductoController()
 [HttpGet("products")]
 public IActionResult GetAll()
     {
-        var productos = _productosRepository.GetAll();
+        var productos = _productosRepository.GetAllProductos();
         return Ok(productos);
     }
 }
