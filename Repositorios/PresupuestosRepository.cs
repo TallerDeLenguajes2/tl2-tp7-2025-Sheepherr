@@ -4,6 +4,7 @@ using Microsoft.Data.Sqlite;
 
 using Presupuestos;
 using Productos;
+using PresupuestoDetalle;
 using SQLitePCL;
 
 public class PresupuestosRepository
@@ -54,35 +55,44 @@ public class PresupuestosRepository
         }
         return presupuestos;
     }
-    public Productos GetbyIdProducto (int id)
+    public Presupuestos GetbyIdProducto (int id)
     {
+        Presupuestos presupuesto = null;
         using var conexion = new SqliteConnection(cadenaConexion);
         conexion.Open();
         
-        string query = "SELECT idProducto, Descripcion, Precio FROM Productos WHERE idProducto = @id";
+        string query = "SELECT p.NombreDestinatario AS idPres, p.FechaCreacion, pr.Descripcion, d.Cantidad, pr.Precio FROM Presupuestos p JOIN PresupuestosDetalle d ON p.idPresupuestos = d.idPresupuestos JOIN Productos pr ON d.idProducto = pr.idProducto WHERE p.idPresupuestos = @id";
         
         using var comando = new SqliteCommand(query, conexion);
         
         comando.Parameters.Add(new SqliteParameter("@id", id));
 
         using var reader = comando.ExecuteReader();
-        if (reader.Read())
+        while (reader.Read())
         {
+                if (presupuesto == null)
+                {
+                    presupuesto.IdPresupuesto = id;
+                    presupuesto.nombreDestinatario = reader["NombreDestinatario"].ToString();
+                    presupuesto.FechaCreacion = reader["FechaCreacion"].ToString();
+                    presupuesto.detalle = new List<PresupuestoDetalle>();
+                }
             var producto = new Productos
             {
                 idProducto = Convert.ToInt32(reader["idProducto"]),
                 descripcion = reader["Descripcion"].ToString(),
                 precio = Convert.ToInt32(reader["Precio"])
             };
-            return producto;
+            var detalle = new PresupuestoDetalle
+            {
+                producto = producto,
+                cantidad = Convert.ToInt32(reader["Cantidad"])
+            };
+            presupuesto.detalle.Add(detalle);
             
-        }  
-        else
-        {
-            return null;
-        }
+        } 
         
-
+        return presupuesto;
     }
     public void DeleteProducto (int id)
     {
