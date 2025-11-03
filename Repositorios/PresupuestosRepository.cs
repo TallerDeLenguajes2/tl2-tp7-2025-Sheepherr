@@ -11,7 +11,7 @@ public class PresupuestosRepository
 {
     private string cadenaConexion = "Data Source= Db/Tienda.db";
     
-    /*public void InsertPresupuesto (Presupuestos presupuesto)
+    public void InsertPresupuesto (Presupuestos presupuesto)
     {
         using var conexion = new SqliteConnection(cadenaConexion);
         conexion.Open();
@@ -22,17 +22,21 @@ public class PresupuestosRepository
         comando.Parameters.Add(new SqliteParameter("@fechaCreacion", presupuesto.FechaCreacion));
         
         comando.ExecuteNonQuery();
-    }*/
-    /*public void InsertPresupuestoDetalle (int id)
+    }
+    public void InsertPresupuestoDetalle (int id, PresupuestoDetalle presupuestoDetalle)
     {
         using var conexion = new SqliteConnection(cadenaConexion);
         conexion.Open();
-        string query = "INSERT INTO ProsupuestosDetalles SET Descripcion = @Descripcion WHERE idProducto = @idProducto";
+        
+        string query = "INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresupuesto, @idProducto, @Cantidad)";
         using var comando = new SqliteCommand(query, conexion);
-        comando.Parameters.Add(new SqliteParameter("@Descripcion", producto.descripcion));
-        comando.Parameters.Add(new SqliteParameter("@idProducto", id));
+
+        comando.Parameters.Add(new SqliteParameter("@idPresupuesto", id));
+        comando.Parameters.Add(new SqliteParameter("@idProducto", presupuestoDetalle.producto.idProducto));
+        comando.Parameters.Add(new SqliteParameter("@Cantidad", presupuestoDetalle.cantidad));
+        
         comando.ExecuteNonQuery();
-    }*/
+    }
     public List<Presupuestos> GetAllPresupuestos ()
     {
         List<Presupuestos> presupuestos = new List<Presupuestos>();
@@ -47,7 +51,7 @@ public class PresupuestosRepository
                 {
                     var presupuesto = new Presupuestos
                     {
-                        IdPresupuesto = Convert.ToInt32(reader["idPresupuestos"]),
+                        IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]),
                         nombreDestinatario = reader["NombreDestinatario"].ToString(),
                         FechaCreacion = reader["FechaCreacion"].ToString(),
                         detalle = new List<PresupuestoDetalle>()
@@ -137,13 +141,13 @@ public class PresupuestosRepository
         }
         return presupuestos;
     }*/ 
-    public Presupuestos GetbyIdPresupuestosDetalles (int id)
+    public Presupuestos GetbyIdPresupuesto (int id)
     {
         Presupuestos presupuesto = null;
         using var conexion = new SqliteConnection(cadenaConexion);
         conexion.Open();
         
-        string query = "SELECT p.NombreDestinatario AS NombreDestinatario, p.FechaCreacion AS FechaCreacion, pr.Descripcion AS Descripcion, d.Cantidad AS Cantidad, pr.Precio AS Precio, pr.idProducto AS idProducto FROM Presupuestos p INNER JOIN PresupuestosDetalle d ON p.idPresupuestos = d.idPresupuestos INNER JOIN Productos pr ON d.idProducto = pr.idProducto WHERE p.idPresupuestos = @id";
+        string query = "SELECT p.NombreDestinatario AS NombreDestinatario, p.FechaCreacion AS FechaCreacion, pr.Descripcion AS Descripcion, d.Cantidad AS Cantidad, pr.Precio AS Precio, pr.idProducto AS idProducto FROM Presupuestos p INNER JOIN PresupuestosDetalle d ON p.idPresupuesto = d.idPresupuesto INNER JOIN Productos pr ON d.idProducto = pr.idProducto WHERE p.idPresupuesto = @id";
         
         using var comando = new SqliteCommand(query, conexion);
         
@@ -196,6 +200,6 @@ public class PresupuestosRepository
           comando.ExecuteNonQuery();  
         }
 
-    }
+    }   
     
 }
